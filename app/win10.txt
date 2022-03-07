@@ -1,0 +1,498 @@
+package com.zjun.demo;
+
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+
+/**
+ * 动画的两个核心类演示
+ */
+public class AnimTwoCentralActivity extends AppCompatActivity {
+
+    private static final long ANIM_DURATION = 5000;
+
+    private View v_normal;
+    private View v_interpolator;
+    private View v_evaluator;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_anim_two_central);
+
+        initView();
+    }
+
+    private void initView() {
+        v_normal = $(R.id.v_normal);
+        v_interpolator = $(R.id.v_interpolator);
+        v_evaluator = $(R.id.v_evaluator);
+
+        startAnim();
+    }
+
+    private void startAnim() {
+        normalAnim();
+        interpolatorAnim();
+        evaluatorAnim();
+    }
+
+    /**
+     * 自定义估值器的动画
+     */
+    private void evaluatorAnim() {
+        ValueAnimator va = ValueAnimator.ofObject(
+                new TypeEvaluator<PointF>() {
+                    /**
+                     * 估算结果
+                     *
+                     * @param fraction 由插值器提供的值，∈[0, 1]
+                     * @param startValue 开始值
+                     * @param endValue 结束值
+                     * @return
+                     */
+                    @Override
+                    public PointF evaluate(float fraction, PointF startValue, PointF endValue) {
+                        PointF p = new PointF();
+                        float distance = endValue.x - startValue.x;
+                        p.x = fraction * distance;
+                        float halfDistance = distance / 2;
+                        float sinX = (float) Math.sin(fraction * Math.PI / 0.5);
+                        p.y = -halfDistance * sinX;
+                        return p;
+                    }
+                },
+                new PointF(0, 0),
+                new PointF(300, 0)
+        );
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                PointF pointF = (PointF) animation.getAnimatedValue();
+                v_evaluator.setTranslationX(pointF.x);
+                v_evaluator.setTranslationY(pointF.y);
+            }
+        });
+        va.setDuration(ANIM_DURATION);
+        va.setRepeatCount(ValueAnimator.INFINITE);
+        va.start();
+    }
+
+    /**
+     * 自定义插值器的动画
+     */
+    private void interpolatorAnim() {
+        ObjectAnimator oa = ObjectAnimator.ofFloat(v_interpolator, "translationX", 0, 300);
+        oa.setInterpolator(new TimeInterpolator() {
+            /**
+             * 获取插值器的值
+             * @param input 原生帧值[0, 1]
+             * @return 校正后的值
+             */
+            @Override
+            public float getInterpolation(float input) {
+                // 前半段时间为直线（匀速运动），后半段贝塞尔曲线（先反向）
+                if (input < 0.5) {
+                    return input;
+                }
+                // 把贝塞尔曲线范围[0.5, 1]转换成[0, 1]范围
+                input = (input - 0.5f) * (1 - 0) / (1 - 0.5f);
+                float tmp = 1 - input;
+                return tmp * tmp * 0.5f + 2 * input * tmp * 0 + input * input * 1;
+            }
+        });
+        oa.setDuration(ANIM_DURATION);
+        oa.setRepeatCount(ValueAnimator.INFINITE);
+        oa.start();
+    }
+
+    /**
+     * 普通动画
+     * 差值器默认为AccelerateDecelerateInterpolator
+     */
+    private void normalAnim() {
+        ObjectAnimator oa = ObjectAnimator.ofFloat(v_normal, "translationX", 0, 300);
+        oa.setDuration(ANIM_DURATION);
+        oa.setRepeatCount(ValueAnimator.INFINITE);
+        oa.start();
+    }
+
+    private <V extends View> V $(int id) {
+        return (V) findViewById(id);
+    }
+
+    private void logD(String format, Object... args) {
+        Log.d(AnimTwoCentralActivity.class.getSimpleName(), "@zjun: " + String.format(format, args));
+    }
+}
+
+
+
+
+
+
+package com.zjun.demo;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_win10:
+                startActivity(new Intent(this, Win10LoadingRendererActivity.class));
+                break;
+
+            case R.id.btn_anim:
+                startActivity(new Intent(this, AnimTwoCentralActivity.class));
+                break;
+
+            case R.id.btn_track:
+                startActivity(new Intent(this, Win10_AnimTrackActivity.class));
+                break;
+        }
+    }
+}
+
+
+
+
+package com.zjun.demo;
+
+import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import com.zjun.loadingrenderer.Win10LoadingRenderer;
+
+import java.util.Random;
+
+public class Win10LoadingRendererActivity extends AppCompatActivity {
+
+    private LinearLayout ll_parent;
+    private Button btn_start;
+    private Win10LoadingRenderer win10_1;
+
+    private int[] mDotColors = {Color.RED, Color.GREEN, Color.BLUE, Color.BLACK, Color.CYAN, Color.YELLOW};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_win10_loading_renderer);
+
+        initView();
+    }
+
+    private void initView() {
+        ll_parent = $(R.id.ll_parent);
+        win10_1 = $(R.id.win10_1);
+        btn_start = $(R.id.btn_start);
+
+        stopAnim();
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_change_color:
+                win10_1.setDotColor(mDotColors[new Random().nextInt(mDotColors.length)]);
+                break;
+
+            case R.id.btn_start:
+                startOrStopAnim();
+                break;
+        }
+    }
+
+    private void startOrStopAnim() {
+        if ("开始".equals(btn_start.getText().toString())) {
+            btn_start.setText("停止");
+            startAnim();
+        } else {
+            btn_start.setText("开始");
+            stopAnim();
+        }
+    }
+
+    private void startAnim() {
+        int count = ll_parent.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = ll_parent.getChildAt(i);
+            if (view instanceof Win10LoadingRenderer) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void stopAnim() {
+        int count = ll_parent.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = ll_parent.getChildAt(i);
+            if (view instanceof Win10LoadingRenderer) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    private <V extends View> V $(int id) {
+        return (V) findViewById(id);
+    }
+}
+
+
+
+
+
+package com.zjun.demo;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class Win10_AnimTrackActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_anim_track);
+    }
+}
+
+
+
+
+
+package com.zjun.demo;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathEffect;
+import android.util.AttributeSet;
+import android.view.View;
+
+/**
+ * File Name    : AnimTrackChart
+ * Description  : 动画轨迹图，展示Win10动画的时间比图
+ * Author       : Ralap
+ * Update Date  : 2016/10/8
+ * Create Date  : 2016/10/7
+ * Version      : v1.1
+ * ---------------------------------------------
+ * v1.1     2016/10/8
+ *          根据Win10LoadingRenderer的新的参数进行修改
+ * v1       2016/10/7
+ *          新建
+ */
+public class Win10_AnimTrackChart extends View {
+    private Paint mPaint;
+    private Path path;
+    private PathEffect pathEffect;
+
+    private int centerX = 50;
+    private int centerY = 350;
+    private int scale = 300;
+    private int[] colors = {Color.RED, Color.MAGENTA, Color.YELLOW, Color.GREEN, Color.BLUE};
+
+    public Win10_AnimTrackChart(Context context) {
+        this(context, null);
+    }
+
+    public Win10_AnimTrackChart(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(1f);
+
+        path = new Path();
+        pathEffect = new DashPathEffect(new float[]{5, 5}, 1);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        // 画坐标
+        drawCoordinate(canvas);
+        // 画轨迹图
+        drawTrack(canvas);
+    }
+
+    private void drawTrack(Canvas canvas) {
+
+        long duration = 1; // 一个周期（2圈）一共运行7000ms，固定值
+
+        // 最小执行单位时间
+        final float minRunUnit = duration / 100f;
+        // 最小执行单位时间所占总时间的比例
+        float minRunPer = minRunUnit / duration;
+
+        for (int index = 0; index < 5; index++) {
+            // 在插值器中实际值（Y坐标值），共8组
+            final float[] ys = new float[]{
+                    0,
+                    0,
+                    160 / 720f,
+                    190 / 720f,
+                    360 / 720f,
+                    520 / 720f,
+                    550 / 720f,
+                    1
+            };
+            // 动画开始的时间比偏移量。剩下的时间均摊到每个圆点上
+            final float offset =  index * (100 - 86) * minRunPer / (5 - 1);
+            // 在差值器中理论值（X坐标值），与ys对应
+            final float[] xs = new float[]{
+                    0,
+                    offset + 0,
+                    offset + 11 * minRunPer,
+                    offset + 32 * minRunPer,
+                    offset + 43 * minRunPer,
+                    offset + 54 * minRunPer,
+                    offset + 75 * minRunPer,
+                    offset + 86 * minRunPer
+            };
+            
+            
+            // 放大，并把原坐标中心移动到现坐标中心
+            for (int i = 0; i < ys.length; i++) {
+                ys[i] = centerY - ys[i] * scale ;
+                xs[i] = centerX + xs[i] * scale;
+            }
+
+            mPaint.setColor(colors[index]);
+            path.reset();
+            // 绘制第1段 直线
+            path.moveTo(xs[0], ys[0]);
+            path.lineTo(xs[1], ys[1]);
+
+            // 绘制第2段 贝塞尔曲线
+            float p1 = calculateLineY(xs[2], ys[2], xs[3], ys[3], xs[1]);
+            path.quadTo(xs[1], p1, xs[2], ys[2]);
+
+            // 绘制第3段 直线
+            path.lineTo(xs[3], ys[3]);
+
+            // 绘制第4段 贝塞尔曲线
+            p1 = calculateLineY(xs[2], ys[2], xs[3], ys[3], xs[4]);
+            path.quadTo(xs[4], p1, xs[4], ys[4]);
+
+            // 绘制第5段 贝塞尔曲线
+            p1 = calculateLineY(xs[5], ys[5], xs[6], ys[6], xs[4]);
+            path.quadTo(xs[4], p1, xs[5], ys[5]);
+
+            // 绘制第6段 直线
+            path.lineTo(xs[6], ys[6]);
+
+            // 绘制第7段 贝塞尔曲线
+            p1 = calculateLineY(xs[5], ys[5], xs[6], ys[6], xs[7]);
+            path.quadTo(xs[7], p1, xs[7], ys[7]);
+
+            // 绘制第8段 直线
+            path.lineTo(centerX + scale, centerY - scale);
+
+            canvas.drawPath(path, mPaint);
+
+            if (index == 0) {
+                // 绘制圆点1的参考线
+                path.reset();
+                for (int j = 0; j < xs.length; j++) {
+                    path.moveTo(xs[j], centerY);
+                    path.lineTo(xs[j], ys[j]);
+                }
+                mPaint.setColor(Color.DKGRAY);
+                mPaint.setPathEffect(pathEffect);
+                canvas.drawPath(path, mPaint);
+
+                mPaint.setPathEffect(null); // 恢复
+            }
+
+
+        }
+
+    }
+
+
+
+    private void drawCoordinate(Canvas canvas) {
+        mPaint.setColor(Color.DKGRAY);
+        // X轴
+        canvas.drawLine(centerX, centerY, centerX + scale + 50, centerY, mPaint);
+        // Y轴
+        canvas.drawLine(centerX, centerY, centerX, centerY - scale - 50, mPaint);
+
+        // x=1, y=1的参考线
+        path.reset();
+        path.moveTo(centerX + scale, centerY);
+        path.rLineTo(0, -scale);
+        path.rLineTo(-scale, 0);
+
+        mPaint.setPathEffect(pathEffect);
+        canvas.drawPath(path, mPaint);
+
+        mPaint.setPathEffect(null); // 恢复
+
+        // 参考坐标值
+        canvas.drawText("0", centerX - 10, centerY + 12, mPaint);
+        canvas.drawText("1", centerX + scale - 5, centerY + 12, mPaint);
+        canvas.drawText("1", centerX - 10, centerY - scale + 6, mPaint);
+
+    }
+
+    private float calculateLineY(double x1, double y1, double x2, double y2, double x) {
+        if (x1 == x2) {
+            return (float) y1;
+        }
+        return (float) ((x - x1) * (y2 - y1) / (x2 - x1) + y1);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+drawble/
+shape_circle.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@android:color/holo_green_dark" />
+</shape>
