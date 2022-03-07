@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/system_seeting"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/system_seeting">
+    </item>
+    <item
+        android:id="@+id/About_app"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/About_app">
+    </item>
+    <item
+        android:id="@+id/share_APP"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/share_APP"></item>
+    <item
+        android:id="@+id/encoura_for_author"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/encoura_for_author">
+    </item>
+    <item
+        android:id="@+id/version"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="@string/version">
+    </item>
+    <item
+        android:id="@+id/intoteam"
+        android:title="@string/intoteam" />
+</menu>

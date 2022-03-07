@@ -1,0 +1,14 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/action_settings" />
+    <item
+        android:id="@+id/action_exti"
+        android:title="@string/action_exti" />
+    <item
+        android:id="@+id/action_other"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="MORE..." />
+</menu>

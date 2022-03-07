@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">BKRC_CAR</string>
+    <string name="title">智能嵌入式系统应用创新实训平台</string>
+    <string name="wellword">嵌入式智能小车V3.2\n\n
+    1.修复退出时返回到起始界面的BUG\n
+    2.调整、精简主界面布局\n
+    3.新增虚拟摇杆控制，支持调速及原地转向\n
+    4.新增重力感应控制(后期将支持灵敏度调节)，支持倾角调速及原地转向\n
+    5.新增再点一次退出提示功能\n
+    6.新增保存摄像头图片及保存状态提示功能\n
+    7.新增第一次启动欢迎界面\n
+    8.新增起始界面的横竖屏选择模式\n
+    9.支持横竖屏模式下的重力及摇杆控制模式的切换\n
+    10.竖屏支持双侧独立驱动油门控制\n
+    11.优化精简Zigbee控制界面，新增一键控制Zigbee节点，支持连续无缝控制\n
+    12.修复重力模式下的横屏反向BUG\n
+    13.新增分享、反馈、打赏等功能(长按或点击功能键打开)\n</string>
+
+
+    <string name="button_pre">上一曲</string>
+    <string name="button_play">播放</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_exti">Exti</string>
+    <!-- string name="button_pause 暂停 -->
+    <string name="button_pause">播放/暂停</string>
+    <string name="button_stop">停止</string>
+    <string name="button_next">下一曲</string>
+    <string name="hide_title">隐藏/显示标题栏</string>
+    <string name="hide_state">隐藏状态栏</string>
+    <string name="for_more">查看更多</string>
+    <string name="search_music">更新音乐列表</string>
+    <string name="set_music_path">设置音乐路径</string>
+    <string name="cancel_search">取消搜索</string>
+    <string name="ok_search">确定搜索</string>
+    <string name="dafualt_path">/storage/emulated/0/MUSIC/</string>
+    <string name="system_seeting">系统设置</string>
+    <string name="encoura_for_author">打赏作者</string>
+    <string name="About_app">关于应用</string>
+    <string name="share_APP">分享应用</string>
+    <string name="version">软件版本</string>
+    <string name="exti">退出</string>
+    <string name="watch_code">查看源代码</string>
+    <string name="hide_code">隐藏源代码</string>
+    <string name="password_code">源代码查看密码</string>
+    <string name="give_kiss">赏么么哒</string>
+    <string name="to_light">打开/关闭手电筒</string>
+    <string name="open_light">当前打开手电筒</string>
+    <string name="close_light">当前关闭手电筒</string>
+    <string name="light_on">打开</string>
+    <string name="light_off">关闭</string>
+    <string name="exti_light">退出</string>
+    <string name="more">MORE...</string>
+    <string name="game1">摞方块</string>
+    <string name="game2">神经猫</string>
+    <string name="game3">更多(暂无)</string>
+    <string name="start_game">开始游戏</string>
+    <string name="more_gra">重力</string>
+    <string name="pic_name">图片名称</string>
+    <string name="pic_pre">上一张</string>
+    <string name="pic_next">下一张</string>
+    <string name="radio_currentpath">在当前目录下搜索</string>
+    <string name="radio_wholepath">在整个目录下搜索</string>
+    <string name="create_file">文本文件</string>
+    <string name="create_folder">文件夹</string>
+    <string name="edit_search_hint">搜索关键字</string>
+    <string name="lable_title">标题</string>
+    <string name="lable_detail">内容</string>
+    <string name="button_refer">保存</string>
+    <string name="button_back">返回</string>
+    <string name="intoteam">加入安卓开发</string>
+    <string name="testautovolname">自动音量调整测试版</string>
+    <string name="create_hint">输入文件名称</string>
+</resources>

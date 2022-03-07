@@ -1,0 +1,164 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1292c4"
+    android:orientation="vertical"
+    tools:context="${relativePackage}.${activityClass}"
+	android:weightSum="1">
+
+	<!-- LinearLayout  Below -->
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentTop="true"
+			android:orientation="vertical">
+			<!-- title -->
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<TextView
+					android:id="@+id/title_text"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_centerVertical="true"
+					android:text="@string/title"
+					android:textSize="20sp" />
+			</RelativeLayout>
+
+			<!-- Camer image -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="200dp"
+				android:gravity="center_horizontal"
+				android:orientation="horizontal">
+
+				<FrameLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent">
+
+					<ImageView
+						android:id="@+id/image_show"
+						android:layout_width="match_parent"
+						android:layout_height="match_parent"
+						android:background="@drawable/bitmap_shape" />
+				</FrameLayout>
+			</LinearLayout>
+
+
+			<!-- Data show -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical">
+
+				<TextView
+					android:id="@+id/Data_show"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:text="无信息"
+					android:textSize="15sp" />
+
+			</LinearLayout>
+
+
+			<!-- input speed and coded disc -->
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_above="@+id/relativeLayout"
+
+			android:layout_alignParentStart="true"
+			android:orientation="vertical">
+			<!-- 摄像头按键 -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal">
+
+				<Button
+					android:id="@+id/morefunc"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:onClick="myonClick"
+					android:text="更多" />
+
+				<Button
+					android:id="@+id/scancode"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="扫码" />
+
+				<Button
+					android:id="@+id/cameraphoto"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:onClick="myonClick"
+					android:text="拍照" />
+
+				<Button
+					android:id="@+id/gra_but"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="重力:关闭" />
+			</LinearLayout>
+		</LinearLayout>
+
+		<RelativeLayout
+			android:id="@+id/relativeLayout"
+			android:layout_width="match_parent"
+			android:layout_height="196dp"
+			android:layout_alignParentBottom="true">
+
+			<xdtech.rc_car.RockerView
+				android:id="@+id/car_ctr"
+				android:layout_width="180dp"
+				android:layout_height="180dp"
+				android:layout_centerHorizontal="true"
+				android:layout_centerVertical="true" />
+
+			<SeekBar
+				android:id="@+id/seekBarright"
+				android:layout_width="150dp"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_centerVertical="true"
+				android:max="200"
+				android:maxHeight="4dp"
+				android:minHeight="4dp"
+				android:progress="100"
+				android:rotation="90"
+				android:progressDrawable="@color/colorPrimary"
+				android:thumb="@drawable/seekbarpic" />
+
+			<SeekBar
+				android:id="@+id/seekBarleft"
+				android:layout_width="150dp"
+				android:layout_height="wrap_content"
+				android:layout_alignParentStart="true"
+				android:layout_centerVertical="true"
+				android:max="200"
+				android:maxHeight="4dp"
+				android:minHeight="4dp"
+				android:progress="100"
+				android:rotation="90"
+				android:progressDrawable="@color/colorPrimary"
+				android:thumb="@drawable/seekbarpic" />
+		</RelativeLayout>
+	</RelativeLayout>
+
+</LinearLayout>
